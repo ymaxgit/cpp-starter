@@ -28,6 +28,7 @@ AC_SUBST([AM_CXXFLAGS], ["$WARN_FLAGS"])
 AC_SUBST([AR_FLAGS], ["cr"])
 
 # Checks for programs.
+AC_PROG_CC
 AC_PROG_CXX
 AC_LANG([C++])
 AX_CXX_COMPILE_STDCXX_11([noext])

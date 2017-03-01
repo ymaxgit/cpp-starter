@@ -17,35 +17,26 @@ int main(void)
 {
     Cache<std::string, int> cache(2);
 
-    string key = "hello";
+    string key1 = "hello1";
     string key2 = "hello2";
     string key3 = "hello3";
 
-    bool b = cache.set(key, 10);
-    int *v = cache.get(key);
+    cout << "# Test Get/Set" << endl;
+    cache.set(key1, 10);
+    checkKey(cache, key1);
 
-    if (v != nullptr) {
-      cout << *v << endl;
-    } else {
-      cout << "miss!" << endl;
-    }
-
-    b = cache.remove(key);
+    cout << endl << "# Test Delete" << endl;
+    bool b = cache.remove(key1);
     cout << "removed? " << b << endl;
+    checkKey(cache, key1);
 
-    v = cache.get(key);
+    cout << endl << "# Test LRU" << endl;
+    cache.set(key1, 10);
+    cache.set(key2, 10);
+    checkKey(cache, key1);
+    cache.set(key3, 10);
 
-    if (v != nullptr) {
-      cout << *v << endl;
-    } else {
-      cout << "miss!" << endl;
-    }
-
-    b = cache.set(key2, 10);
-    checkKey(cache, key);
-    b = cache.set(key3, 10);
-
-    checkKey(cache, key);
+    checkKey(cache, key1);
     checkKey(cache, key2);
     checkKey(cache, key3);
 }

@@ -5,8 +5,6 @@
 #include <list>
 #include <map>
 
-int example(int x);
-
 template <class K, class V>
 class Cache {
 public:
@@ -15,7 +13,7 @@ public:
     V value;
   };
 
-  Cache(int size);
+  Cache(std::size_t size);
 
   bool set(K key, V value);
   V* get(K key);
@@ -25,13 +23,13 @@ public:
   using map_value = typename std::list<KV>::iterator;
 
 private:
-  int limit;
+  std::size_t limit;
   std::map<K,map_value> map;
   std::list<KV> evict;
 };
 
 template <class K, class V>
-Cache<K,V>::Cache(int size)
+Cache<K,V>::Cache(std::size_t size)
   : limit{size}
   , map{}
   , evict{}
@@ -43,10 +41,12 @@ bool Cache<K,V>::set(K key, V value)
 {
   // find existing in map
   auto mIX = map.find(key);
+  bool exists = false;
 
   // if exists, delete from LRU
   if (mIX != map.end()) {
     evict.erase(mIX->second);
+    exists = true;
   }
 
   // store at end of LRU
@@ -61,6 +61,7 @@ bool Cache<K,V>::set(K key, V value)
     lIX = evict.begin();
     map.erase(lIX->key);
   }
+  return exists;
 }
 
 template <class K, class V>
